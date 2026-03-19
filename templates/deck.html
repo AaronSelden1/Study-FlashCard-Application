@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ deck.name }} | Study Flashcard App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>&#128194; {{ deck.name }}</h2>
+  {% if deck.description %}<p class="deck-desc">{{ deck.description }}</p>{% endif %}
+  <div class="page-actions">
+    <a class="btn btn-primary" href="{{ url_for('study', deck_id=deck.id) }}">&#9654; Study Deck</a>
+    <a class="btn btn-secondary" href="{{ url_for('dashboard') }}">&larr; Back to Dashboard</a>
+  </div>
+</div>
+
+<!-- Add card form -->
+<div class="form-card">
+  <h3>Add a Card</h3>
+  <form method="POST" action="{{ url_for('add_card', deck_id=deck.id) }}">
+    <div class="form-group">
+      <label for="question">Question</label>
+      <textarea id="question" name="question" rows="2" placeholder="Enter the question" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="answer">Answer</label>
+      <textarea id="answer" name="answer" rows="2" placeholder="Enter the answer" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Card</button>
+  </form>
+</div>
+
+<!-- Card list -->
+<h3>Cards ({{ cards|length }})</h3>
+{% if cards %}
+  <div class="card-list">
+    {% for card in cards %}
+    <div class="card-item">
+      <div class="card-body">
+        <p class="card-question"><strong>Q:</strong> {{ card.question }}</p>
+        <hr class="card-divider">
+        <p class="card-answer"><strong>A:</strong> {{ card.answer }}</p>
+      </div>
+      <div class="card-actions">
+        <a class="btn btn-secondary btn-sm"
+           href="{{ url_for('edit_card', deck_id=deck.id, card_id=card.id) }}">Edit</a>
+        <form method="POST"
+              action="{{ url_for('delete_card', deck_id=deck.id, card_id=card.id) }}"
+              onsubmit="return confirm('Delete this card?');" style="display:inline;">
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="empty-msg">No cards yet. Add your first card above.</p>
+{% endif %}
+{% endblock %}

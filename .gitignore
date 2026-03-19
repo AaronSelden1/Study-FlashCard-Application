@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# SQLite database files
+*.db
+*.sqlite3
+
+# Flask / app secrets
+instance/
+.secret_key
+
+# pytest cache
+.pytest_cache/
+.cache/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editor artifacts
+.vscode/
+.idea/
+*.swp
+*.swo

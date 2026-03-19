@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Studying: {{ deck.name }} | Study Flashcard App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Studying: {{ deck.name }}</h2>
+  <small>{{ cards|length }} card{{ 's' if cards|length != 1 }} in this session</small>
+</div>
+
+<!--
+  Phase I: form-based self-assessment.
+  Each card is shown with its question and answer visible.
+  The user checks "Got It" for cards they know before submitting.
+  Phase II will replace this with the interactive one-at-a-time card-flip UI.
+-->
+<form method="POST" action="{{ url_for('study_result', deck_id=deck.id) }}">
+  <div class="card-list">
+    {% for card in cards %}
+    <div class="card-item study-card">
+      <div class="card-body">
+        <p class="card-question"><strong>Q:</strong> {{ card.question }}</p>
+        <hr class="card-divider">
+        <p class="card-answer"><strong>A:</strong> {{ card.answer }}</p>
+      </div>
+      <div class="card-actions">
+        <label class="got-it-label">
+          <input type="checkbox" name="got_it" value="{{ card.id }}">
+          &#10003; Got It
+        </label>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="study-submit">
+    <button type="submit" class="btn btn-primary">Finish Session</button>
+    <a class="btn btn-secondary" href="{{ url_for('view_deck', deck_id=deck.id) }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

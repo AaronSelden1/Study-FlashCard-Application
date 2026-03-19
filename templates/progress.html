@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Session Results | Study Flashcard App{% endblock %}
+
+{% block content %}
+<div class="progress-card">
+  <h2>Session Complete!</h2>
+  <h3>{{ deck.name }}</h3>
+
+  <div class="progress-stats">
+    <div class="stat">
+      <span class="stat-value">{{ total }}</span>
+      <span class="stat-label">Total Cards</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ got_it }}</span>
+      <span class="stat-label">Got It</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ total - got_it }}</span>
+      <span class="stat-label">Try Again</span>
+    </div>
+    <div class="stat stat-mastery">
+      <span class="stat-value">{{ mastery }}%</span>
+      <span class="stat-label">Mastery</span>
+    </div>
+  </div>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" style="width: {{ mastery }}%;"></div>
+  </div>
+
+  <div class="progress-actions">
+    <a class="btn btn-primary" href="{{ url_for('study', deck_id=deck.id) }}">Study Again</a>
+    <a class="btn btn-secondary" href="{{ url_for('view_deck', deck_id=deck.id) }}">Back to Deck</a>
+    <a class="btn btn-secondary" href="{{ url_for('dashboard') }}">Dashboard</a>
+  </div>
+</div>
+{% endblock %}
