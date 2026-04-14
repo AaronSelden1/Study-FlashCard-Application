@@ -471,7 +471,11 @@ def study(deck_id):
         flash("This deck has no cards to study. Add some cards first.", "warning")
         return redirect(url_for("view_deck", deck_id=deck_id))
 
+    cards = [dict(row) for row in cards]
+
     return render_template("study.html", deck=deck, cards=cards)
+
+   
 
 
 @app.route("/study/<int:deck_id>/result", methods=["POST"])

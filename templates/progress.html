@@ -35,4 +35,28 @@
     <a class="btn btn-secondary" href="{{ url_for('dashboard') }}">Dashboard</a>
   </div>
 </div>
+{% if mastery == 100 %}
+<!-- Confetti library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+  // Fire a nice celebratory burst
+  confetti({
+    particleCount: 180,
+    spread: 90,
+    startVelocity: 40,
+    origin: { y: 0.6 }
+  });
+
+  // Optional: a second burst for extra flair
+  setTimeout(() => {
+    confetti({
+      particleCount: 120,
+      spread: 70,
+      startVelocity: 35,
+      origin: { y: 0.6 }
+    });
+  }, 400);
+</script>
+{% endif %}
 {% endblock %}

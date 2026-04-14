@@ -13,27 +13,99 @@
   The user checks "Got It" for cards they know before submitting.
   Phase II will replace this with the interactive one-at-a-time card-flip UI.
 -->
-<form method="POST" action="{{ url_for('study_result', deck_id=deck.id) }}">
-  <div class="card-list">
-    {% for card in cards %}
-    <div class="card-item study-card">
-      <div class="card-body">
-        <p class="card-question"><strong>Q:</strong> {{ card.question }}</p>
-        <hr class="card-divider">
-        <p class="card-answer"><strong>A:</strong> {{ card.answer }}</p>
+  <h1 style="color:red">YOU ARE IN STUDY.HTML</h1>
+ <div class="flashcard-container">
+  <div class="flashcard" id="flashcard" onclick="flipCard()">
+    <div class="flashcard-inner">
+      <div class="flashcard-front">
+        <strong>Q:</strong> {{ cards[0].question }}
       </div>
-      <div class="card-actions">
-        <label class="got-it-label">
-          <input type="checkbox" name="got_it" value="{{ card.id }}">
-          &#10003; Got It
-        </label>
+
+      <div class="flashcard-back">
+        <strong>A:</strong> {{ cards[0].answer }}
       </div>
+
     </div>
-    {% endfor %}
   </div>
-  <div class="study-submit">
-    <button type="submit" class="btn btn-primary">Finish Session</button>
-    <a class="btn btn-secondary" href="{{ url_for('view_deck', deck_id=deck.id) }}">Cancel</a>
-  </div>
-</form>
+</div>
+  <div class="study-actions">
+  <button type="button" class="btn btn-success" onclick="markGotIt()">
+    Got It
+  </button>
+
+  <button type="button" class="btn btn-secondary" onclick="markTryAgain()">
+    Try Again
+  </button>
+
+  <button type="button" class="btn btn-primary" onclick="submitSession()">
+    Finish Session
+  </button>
+</div>
+
+<script>
+  const cards = {{ cards | tojson }};
+  let currentIndex = 0;
+  const gotIt = [];
+  const tryAgain = [];
+
+  function flipCard() {
+    document.getElementById('flashcard').classList.toggle('flipped');
+  }
+
+  function markGotIt() {
+    gotIt.push(cards[currentIndex].id);
+    nextCard();
+  }
+
+  function markTryAgain() {
+    tryAgain.push(cards[currentIndex].id);
+    nextCard();
+  }
+
+  function nextCard() {
+    currentIndex++;
+
+    if (currentIndex >= cards.length) {
+      submitSession();
+      return;
+    }
+
+    renderCard();
+  }
+
+  function renderCard() {
+    document.querySelector(".flashcard-front").innerHTML =
+      "<strong>Q:</strong> " + cards[currentIndex].question;
+
+    document.querySelector(".flashcard-back").innerHTML =
+      "<strong>A:</strong> " + cards[currentIndex].answer;
+
+    document.getElementById("flashcard").classList.remove("flipped");
+  }
+
+  function submitSession() {
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "{{ url_for('study_result', deck_id=deck.id) }}";
+
+    gotIt.forEach(id => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "got_it";
+      input.value = id;
+      form.appendChild(input);
+    });
+
+    tryAgain.forEach(id => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "try_again";
+      input.value = id;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+</script>
 {% endblock %}

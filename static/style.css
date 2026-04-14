@@ -169,6 +169,65 @@ a:hover { text-decoration: underline; }
 .got-it-label input { width: 16px; height: 16px; cursor: pointer; }
 .study-submit { margin-top: 20px; display: flex; gap: 10px; }
 
+/* -- Flashcard flip animation (Phase II) -- */
+.flashcard-container {
+  perspective: 1000px;
+  max-width: 500px;
+  margin: 40px auto;
+} 
+
+.flashcard {
+  width: 100%;
+  height: 250px;
+  position: relative;
+}
+
+.flashcard-inner {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.flashcard.flipped .flashcard-inner { 
+  transform: rotateY(180deg); 
+}
+
+.flashcard-front, .flashcard-back {
+
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border: 1.5px solid #dde3ed;
+  border-radius: 6px;
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+}
+
+.flashcard-back{
+  transform: rotateY(180deg);
+  color: #444;
+}
+
+.flashcard:hover{
+  cursor: pointer; 
+}
+
+.flashcard-front strong,
+.flashcard-back strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #1e3a5f;
+}
 /* ── Progress summary ────────────────────────────────────── */
 .progress-card {
   background: #fff;
